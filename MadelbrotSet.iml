@@ -7,5 +7,20 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="file://D:/complex" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="file://D:/complex/docs/apidocs" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="file://D:/complex" />
+        </SOURCES>
+        <jarDirectory url="file://D:/complex" recursive="false" />
+        <jarDirectory url="file://D:/complex" recursive="false" type="SOURCES" />
+      </library>
+    </orderEntry>
   </component>
 </module>
