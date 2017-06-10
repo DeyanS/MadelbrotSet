@@ -17,6 +17,8 @@ public class Main {
         return res;
     }
 
+//TRY!!!
+
     public static int z_check(Complex c) {
 
         Complex z0 = new Complex(0.0, 0.0);
