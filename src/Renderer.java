@@ -1,6 +1,7 @@
 import org.apache.commons.math3.complex.Complex;
 
 import java.awt.image.BufferedImage;
+import java.io.PrintWriter;
 
 public class Renderer implements Runnable{
 
@@ -45,9 +46,15 @@ public class Renderer implements Runnable{
     }
 
     public void render() {
-        double YStep = 1.0 / ((height - 1)* 1.2);
+        long startTime = System.nanoTime();
+        double YStep;
+        if(start == 0) {
+             YStep = 1.0 / ((height - 1) * 1.2);
+        }else {
+            YStep = (1.0 / ((height - 1) * 1.2)) * (start + 1);
+        }
 
-        for (int i = (int) start; i < (int) (height - 1) * 1.2; i++) {
+        for (int i = (int) start; i < (int) (end - 1) ; i++) {
             double YDifference = Math.abs(max_y - min_y);
             double pointY = max_y - YDifference * YStep;
             int pointYOnBufImg = (int) (Math.abs((pointY - max_y)) * ((height - 1)/ YDifference));
@@ -62,16 +69,22 @@ public class Renderer implements Runnable{
 
                 int r = z_check(new Complex(pointX, pointY));
 
-                if (r == 0) { // inside ...
-                    bufferImage.setRGB(pointXOnBufImg, pointYOnBufImg, 0x000000);
-                } else {
-                    bufferImage.setRGB(pointXOnBufImg, pointYOnBufImg, 0xffffff);
-                }
+                ColorScheme colorScheme = new ColorScheme(640);
+                bufferImage.setRGB(pointXOnBufImg, pointYOnBufImg, colorScheme.getColor(r));
+
 
                 XStep += 1.0 / ((width - 1)* 1.2);
             }
             YStep += 1.0 / ((height - 1)* 1.2);
         }
+
+        long endTime = System.nanoTime();
+        long duration = (endTime - startTime);
+        long tID = Thread.currentThread().getId();
+        PrintWriter out = new PrintWriter(System.out);
+        out.printf("%d id: %d", duration, tID);
+        out.flush();
+        out.close();
     }
 
 
@@ -82,7 +95,7 @@ public class Renderer implements Runnable{
 
         public static Complex z_iter(Complex z, Complex c) {
             Complex res = z.multiply(z).add(c);
-            //res = res.exp();
+            res = res.exp();
             return res;
         }
 

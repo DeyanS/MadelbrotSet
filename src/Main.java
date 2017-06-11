@@ -13,13 +13,13 @@ public class Main {
 
 
         long startTime = System.nanoTime();
-        int width = 640;
-        int height = 480;
+        int width = 320 * 4;
+        int height = 240 * 4;
 
         BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
 
         Parallelism prl = new Parallelism(2, -2, 2, -2, width, height, bi);
-        prl.setNumberOfThreads(3);
+        prl.setNumberOfThreads(4);
 
         Graphics2D g2d = bi.createGraphics();
         g2d.setColor(Color.WHITE);
@@ -42,8 +42,6 @@ public class Main {
         long endTime = System.nanoTime();
         long duration = (endTime - startTime);
         out.printf("%d", duration);
-        out.flush();
-        out.close();
 
 
     }

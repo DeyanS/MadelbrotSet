@@ -31,7 +31,7 @@ public class Parallelism {
 
     public void startThreads(){
          int whole = (int)(height * 1.2);
-         int[] dividedHeight = splitIntoParts(height, numberOfThreads);
+         int[] dividedHeight = splitIntoParts(whole, numberOfThreads);
          Thread[] threads = new Thread[numberOfThreads];
 
          for(int i = 0; i < numberOfThreads; i++){
@@ -46,6 +46,7 @@ public class Parallelism {
              try {
                  thread.join();
              }
+
              catch (Exception e) {}
          }
      }
