@@ -10,7 +10,7 @@ public class ColorScheme {
 
     public int getColor(int i) {
 
-        int a = (int) (255 * ((double) i) / (maxIterations / 4));
+        int a = (int) (255 * ((double) i) / (maxIterations / 16));
         return
                 // Red & black with fade, a classic!
                 ( (2*a<<16) );

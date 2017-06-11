@@ -7,19 +7,17 @@ import java.io.File;
 
 public class Main {
 
-
-
     public static void main(String[] args) {
 
 
         long startTime = System.nanoTime();
-        int width = 320 * 4;
-        int height = 240 * 4;
+        int width = 320;
+        int height = 240;
 
         BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
 
-        Parallelism prl = new Parallelism(2, -2, 2, -2, width, height, bi);
-        prl.setNumberOfThreads(4);
+        Parallelism prl = new Parallelism(2, 0, 2, 1, width, height, bi);
+        prl.setNumberOfThreads(1);
 
         Graphics2D g2d = bi.createGraphics();
         g2d.setColor(Color.WHITE);

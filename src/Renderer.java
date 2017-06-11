@@ -46,7 +46,6 @@ public class Renderer implements Runnable{
     }
 
     public void render() {
-        long startTime = System.nanoTime();
         double YStep;
         if(start == 0) {
              YStep = 1.0 / ((height - 1) * 1.2);
@@ -65,7 +64,7 @@ public class Renderer implements Runnable{
 
                 double XDifference = Math.abs(max_x - min_x);
                 double pointX = min_x + XDifference * XStep;
-                int pointXOnBufImg = (int) (Math.abs((pointX + max_x)) * ((width - 1)/ XDifference));
+                int pointXOnBufImg = (int)Math.abs(((pointX  - min_x)) * ((width - 1)/ XDifference));
 
                 int r = z_check(new Complex(pointX, pointY));
 
@@ -77,14 +76,6 @@ public class Renderer implements Runnable{
             }
             YStep += 1.0 / ((height - 1)* 1.2);
         }
-
-        long endTime = System.nanoTime();
-        long duration = (endTime - startTime);
-        long tID = Thread.currentThread().getId();
-        PrintWriter out = new PrintWriter(System.out);
-        out.printf("%d id: %d", duration, tID);
-        out.flush();
-        out.close();
     }
 
 
@@ -95,7 +86,7 @@ public class Renderer implements Runnable{
 
         public static Complex z_iter(Complex z, Complex c) {
             Complex res = z.multiply(z).add(c);
-            res = res.exp();
+           //res = res.exp();
             return res;
         }
 
