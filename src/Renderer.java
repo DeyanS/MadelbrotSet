@@ -2,6 +2,7 @@ import org.apache.commons.math3.complex.Complex;
 
 import java.awt.image.BufferedImage;
 import java.io.PrintWriter;
+import java.util.Calendar;
 
 public class Renderer implements Runnable{
 
@@ -46,6 +47,11 @@ public class Renderer implements Runnable{
     }
 
     public void render() {
+        Calendar cal = Calendar.getInstance();
+        long timeStart = cal.getTimeInMillis();
+        long threadId = Thread.currentThread().getId();
+        System.out.printf("%d -> Thread-%d started. %n", timeStart,  threadId);
+
         double YStep;
         if(start == 0) {
              YStep = 1.0 / ((height - 1) * 1.2);
@@ -76,6 +82,12 @@ public class Renderer implements Runnable{
             }
             YStep += 1.0 / ((height - 1)* 1.2);
         }
+        cal = Calendar.getInstance();
+        long timeEnd = cal.getTimeInMillis();
+        timeStart = timeEnd - timeStart;
+
+        System.out.printf("%d -> Thread-%d stopped. %n", timeEnd,  threadId);
+        System.out.printf("Thread-%d execution time was (millis): %d %n", threadId, timeStart);
     }
 
 
@@ -86,7 +98,7 @@ public class Renderer implements Runnable{
 
         public static Complex z_iter(Complex z, Complex c) {
             Complex res = z.multiply(z).add(c);
-           //res = res.exp();
+            res = res.exp();
             return res;
         }
 

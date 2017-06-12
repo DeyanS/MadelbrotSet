@@ -4,12 +4,14 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.File;
+import java.util.Calendar;
 
 public class Main {
 
     public static void main(String[] args) {
+        Calendar cal = Calendar.getInstance();
+        long timeStart = cal.getTimeInMillis();
 
-        long startTime = System.nanoTime();
         int width = 640;
         int height = 480;
 
@@ -63,8 +65,6 @@ public class Main {
 
         prl.startThreads();
 
-        PrintWriter out = new PrintWriter(System.out);
-
         g2d.setColor(Color.GRAY);
         g2d.drawRect(0, 0, width - 2, height - 2);
 
@@ -74,10 +74,12 @@ public class Main {
             e.printStackTrace();
         }
 
-        out.printf("done.\n");
-        long endTime = System.nanoTime();
-        long duration = (endTime - startTime);
-        out.printf("%d", duration);
+        cal = Calendar.getInstance();
+        long timeEnd = cal.getTimeInMillis();
+        timeEnd = timeEnd - timeStart;
+
+        System.out.printf("Threads used in current run: %d %n", numThreads);
+        System.out.printf("Total execution time for current run (millis): %d %n", timeEnd);
 
     }
 
