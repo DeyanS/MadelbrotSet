@@ -1,75 +1,78 @@
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.File;
 import java.util.Calendar;
 
 public class Main {
 
     public static void main(String[] args) {
-        Calendar cal = Calendar.getInstance();
-        long timeStart = cal.getTimeInMillis();
-
-        int width = 640;
-        int height = 480;
-
-        double max_x = 2;
-        double min_x = -2;
-
-        double max_y = 2;
-        double min_y = -2;
-
-        String imageName = "zad19.png";
-
-        int numThreads = 1;
+        Parameters params = new Parameters();
 
          for(int i = 0; i < args.length; i += 2){
             String[] tokens;
+
+            if(args[i].equals("-q")) {
+                params.isGuiActive = false;
+            }
+
             if(args[i].equals("-s")){
                 tokens = args[i + 1].split("[xX]");
-                width = Integer.parseInt(tokens[0]);
-                height = Integer.parseInt(tokens[1]);
+                params.width = Integer.parseInt(tokens[0]);
+                params.height = Integer.parseInt(tokens[1]);
                 continue;
             }
 
+
             if(args[i].equals("-r") || args[i].equals("-rect")){
                 tokens = args[i + 1].split(":");
-                min_x = Double.parseDouble(tokens[0]);
-                max_x = Double.parseDouble(tokens[1]);
-                min_y = Double.parseDouble(tokens[2]);
-                max_y = Double.parseDouble(tokens[3]);
+                params.min_x = Double.parseDouble(tokens[0]);
+                params.max_x = Double.parseDouble(tokens[1]);
+                params.min_y = Double.parseDouble(tokens[2]);
+                params.max_y = Double.parseDouble(tokens[3]);
                 continue;
             }
 
             if(args[i].equals("-o")){
-                imageName = args[i + 1];
+                params.imageName = args[i + 1];
                 continue;
             }
 
             if(args[i].equals("-t")){
-                numThreads = Integer.parseInt(args[i + 1]);
-                continue;
+                params.numThreads = Integer.parseInt(args[i + 1]);
             }
         }
 
-        BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
+        if(params.isGuiActive){
+            UserInterface gui = UserInterface.getInstance();
+            gui.run();
+        }else {
+            Main.runMain(params);
+        }
 
-        Parallelism prl = new Parallelism(max_x, min_x, max_y, min_y, width, height, bi);
-        prl.setNumberOfThreads(numThreads);
+    }
+
+    public static void runMain(Parameters params){
+        Calendar cal = Calendar.getInstance();
+        long timeStart = cal.getTimeInMillis();
+
+        BufferedImage bi = new BufferedImage( params.width,  params.height, BufferedImage.TYPE_3BYTE_BGR);
+
+        Parallelism prl = new Parallelism(params, bi);
 
         Graphics2D g2d = bi.createGraphics();
         g2d.setColor(Color.WHITE);
-        g2d.fillRect(0, 0, width, height);
+        g2d.fillRect(0, 0, params.width, params.height);
 
         prl.startThreads();
 
         g2d.setColor(Color.GRAY);
-        g2d.drawRect(0, 0, width - 2, height - 2);
+        g2d.drawRect(0, 0, params.width - 2, params.height - 2);
 
         try {
-            ImageIO.write(bi, "PNG", new File(imageName));
+            ImageIO.write(bi, "PNG", new File(params.imageName));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -78,8 +81,13 @@ public class Main {
         long timeEnd = cal.getTimeInMillis();
         timeEnd = timeEnd - timeStart;
 
-        System.out.printf("Threads used in current run: %d %n", numThreads);
-        System.out.printf("Total execution time for current run (millis): %d %n", timeEnd);
+        if(params.isGuiActive){
+            String text = params.area.getText() + "Threads used in current runMain: " + params.numThreads + " \nTotal execution time for current run (millis): " + timeEnd;
+            params.area.setText(text);
+        } else {
+            System.out.printf("Threads used in current runMain: %d %n", params.numThreads);
+            System.out.printf("Total execution time for current run (millis): %d %n", timeEnd);
+        }
 
     }
 
