@@ -1,5 +1,3 @@
-import org.junit.runners.Parameterized;
-
 import java.awt.image.BufferedImage;
 
 public class Parallelism {

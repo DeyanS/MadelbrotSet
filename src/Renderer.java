@@ -1,8 +1,6 @@
-import com.jcraft.jsch.Buffer;
 import org.apache.commons.math3.complex.Complex;
 
 import java.awt.image.BufferedImage;
-import java.io.PrintWriter;
 import java.util.Calendar;
 
 public class Renderer implements Runnable{
